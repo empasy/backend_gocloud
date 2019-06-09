@@ -3,17 +3,23 @@ const bodyParser = require('body-parser');
 var cors = require('cors');
 var AWS = require('aws-sdk');
 const uuidv1 = require('uuid/v1');
+const path = require('path');
 
 AWS.config.update({
-	accessKeyId: "AKIAJKWRMKS5VWVK2NFA", 
-	secretAccessKey: "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",
+	accessKeyId: "AKIAIYJ266LBLOOPBBSA", 
+	secretAccessKey: "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",
 	region: 'us-east-2'
 });
 
 var app = express();
+app.use(express.static(path.join(__dirname, 'dist')));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());
+
+app.get('/', function (req, res) {
+	res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
 
 app.post('/landing/subscriptions', function (req, res) {
   	var ddb = new AWS.DynamoDB({apiVersion: '2012-08-10'});
